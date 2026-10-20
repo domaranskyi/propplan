@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apex Consistency Rule Calculator & Trailing Drawdown Calculator | PropPlan</title>
+<meta name="description" content="Free Apex Trader Funding calculator: 50% consistency rule, EOD & intraday trailing drawdown, daily loss limit, PA scaling contracts and payout eligibility. Get today's risk plan in seconds.">
+<meta name="keywords" content="Apex consistency rule calculator, Apex trailing drawdown calculator, Apex daily loss limit, Apex payout calculator, prop firm risk plan">
+<meta property="og:title" content="PropPlan — Apex consistency rule & trailing drawdown calculator"><meta property="og:description" content="Today's risk plan for your Apex eval or PA account."><meta name="theme-color" content="#0b0f14">
+<link rel="stylesheet" href="/style.css"></head><body>
+<header><h1>Prop<span>Plan</span></h1><p>Apex consistency rule calculator · Apex trailing drawdown calculator · daily risk plan</p></header>
+<div class="disc"><b>Not affiliated with Apex Trader Funding.</b> Not financial advice. Rules change — always verify with Apex before trading. Rules last verified <span class="v"></span>.</div>
+<main>
+<section class="card"><h2>Your account</h2>
+<div class="grid">
+<label>Account size<select id="size"><option>25000</option><option selected>50000</option><option>100000</option><option>150000</option></select></label>
+<label>Drawdown type<select id="type"><option value="EOD">EOD trailing</option><option value="INTRADAY">Intraday trailing</option></select></label>
+<label>Phase<select id="phase"><option value="EVAL">Evaluation</option><option value="PA" selected>PA (funded)</option></select></label>
+<label>Current balance ($)<input id="balance" type="number" value="51800"></label>
+<label><span id="peakLbl">Highest EOD balance ($)</span><input id="peak" type="number" value="52000"></label>
+<label>Today's P&L so far ($)<input id="today" type="number" value="-200"></label>
+<label class="pa">Payouts already taken<input id="payouts" type="number" value="0" min="0" max="6"></label>
+<label class="pa wide">Daily P&L since last payout (excluding today), comma separated<input id="days" value="800, 600, 300, 300"></label>
+</div></section>
+<section class="card plan" id="plan"></section>
+<section class="card"><h2>Get this card every morning — coming soon</h2>
+<form id="sub"><input type="email" id="email" placeholder="you@email.com" required><button>Notify me</button></form><p id="subMsg" class="muted"></p></section>
+<section class="card"><h2>Rule sources</h2><ul id="srcs" class="muted"></ul></section>
+</main><footer class="muted">PropPlan is an independent tool. Apex Trader Funding is a trademark of its owner. Calculations are estimates from published rules; your Apex dashboard is authoritative.</footer>
+<script src="/rules.js"></script><script src="/app.js"></script></body></html>
