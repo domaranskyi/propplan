@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Apex Consistency Rule Calculator & Trailing Drawdown Calculator | PropPlan</title>
-<meta name="description" content="Free Apex Trader Funding calculator: 50% consistency rule, EOD & intraday trailing drawdown, daily loss limit, PA scaling contracts and payout eligibility. Get today's risk plan in seconds.">
+<meta name="description" content="Free Apex Trader Funding calculator: 50% consistency rule, EOD, intraday & legacy trailing drawdown, daily loss limit, PA scaling contracts and payout eligibility. Get today's risk plan in seconds.">
 <meta name="keywords" content="Apex consistency rule calculator, Apex trailing drawdown calculator, Apex daily loss limit, Apex payout calculator, prop firm risk plan">
 <meta property="og:title" content="PropPlan — Apex consistency rule & trailing drawdown calculator"><meta property="og:description" content="Today's risk plan for your Apex eval or PA account."><meta name="theme-color" content="#0b0f14">
 <link rel="stylesheet" href="/style.css"></head><body>
@@ -9,13 +9,16 @@
 <main>
 <section class="card"><h2>Your account</h2>
 <div class="grid">
-<label>Account size<select id="size"><option>25000</option><option selected>50000</option><option>100000</option><option>150000</option></select></label>
-<label>Drawdown type<select id="type"><option value="EOD">EOD trailing</option><option value="INTRADAY">Intraday trailing</option></select></label>
+<label>Account program<select id="type"><option value="EOD">EOD trailing (current)</option><option value="INTRADAY">Intraday trailing (current)</option><option value="LEGACY">Legacy (bought before Mar 1 2026)</option></select></label>
+<label>Account size<select id="size"></select></label>
 <label>Phase<select id="phase"><option value="EVAL">Evaluation</option><option value="PA" selected>PA (funded)</option></select></label>
+<label class="ev">Platform (eval drawdown stop)<select id="platform"><option value="TRADOVATE">Tradovate (trails indefinitely)</option><option value="RITHMIC">Rithmic (locks at target)</option><option value="WEALTHCHARTS">Wealthcharts (locks at target)</option></select></label>
 <label>Current balance ($)<input id="balance" type="number" value="51800"></label>
 <label><span id="peakLbl">Highest EOD balance ($)</span><input id="peak" type="number" value="52000"></label>
 <label>Today's P&L so far ($)<input id="today" type="number" value="-200"></label>
-<label class="pa">Payouts already taken<input id="payouts" type="number" value="0" min="0" max="6"></label>
+<label class="pa">Payouts already taken<input id="payouts" type="number" value="0" min="0"></label>
+<label class="pa">Profit since last payout, excl. today ($) — optional<input id="since" type="number" placeholder="defaults to sum of days"></label>
+<label class="pa lg">Ever closed a day at/above safety net?<select id="reached"><option value="">No / not sure</option><option value="1">Yes</option></select></label>
 <label class="pa wide">Daily P&L since last payout (excluding today), comma separated<input id="days" value="800, 600, 300, 300"></label>
 </div></section>
 <section class="card plan" id="plan"></section>

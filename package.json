@@ -1,1 +1,1 @@
-{"name":"propplan","private":true,"scripts":{"test":"node --test test/"}}
+{"name":"propplan","private":true,"scripts":{"test":"node --test test/","build":"node build.js"}}
