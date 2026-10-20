@@ -2,28 +2,27 @@
 <title>Apex Consistency Rule Calculator & Trailing Drawdown Calculator | PropPlan</title>
 <meta name="description" content="Free Apex Trader Funding calculator: 50% consistency rule, EOD, intraday & legacy trailing drawdown, daily loss limit, PA scaling contracts and payout eligibility. Get today's risk plan in seconds.">
 <meta name="keywords" content="Apex consistency rule calculator, Apex trailing drawdown calculator, Apex daily loss limit, Apex payout calculator, prop firm risk plan">
-<meta property="og:title" content="PropPlan — Apex consistency rule & trailing drawdown calculator"><meta property="og:description" content="Today's risk plan for your Apex eval or PA account."><meta name="theme-color" content="#0b0f14">
-<link rel="stylesheet" href="/style.css"></head><body>
-<header><h1>Prop<span>Plan</span></h1><p>Apex consistency rule calculator · Apex trailing drawdown calculator · daily risk plan</p></header>
-<div class="disc"><b>Not affiliated with Apex Trader Funding.</b> Not financial advice. Rules change — always verify with Apex before trading. Rules last verified <span class="v"></span>.</div>
-<main>
-<section class="card"><h2>Your account</h2>
-<div class="grid">
-<label>Account program<select id="type"><option value="EOD">EOD trailing (current)</option><option value="INTRADAY">Intraday trailing (current)</option><option value="LEGACY">Legacy (bought before Mar 1 2026)</option></select></label>
-<label>Account size<select id="size"></select></label>
-<label>Phase<select id="phase"><option value="EVAL">Evaluation</option><option value="PA" selected>PA (funded)</option></select></label>
-<label class="ev">Platform (eval drawdown stop)<select id="platform"><option value="TRADOVATE">Tradovate (trails indefinitely)</option><option value="RITHMIC">Rithmic (locks at target)</option><option value="WEALTHCHARTS">Wealthcharts (locks at target)</option></select></label>
-<label>Current balance ($)<input id="balance" type="number" value="51800"></label>
-<label><span id="peakLbl">Highest EOD balance ($)</span><input id="peak" type="number" value="52000"></label>
-<label>Today's P&L so far ($)<input id="today" type="number" value="-200"></label>
-<label class="pa">Payouts already taken<input id="payouts" type="number" value="0" min="0"></label>
-<label class="pa">Profit since last payout, excl. today ($) — optional<input id="since" type="number" placeholder="defaults to sum of days"></label>
-<label class="pa lg">Ever closed a day at/above safety net?<select id="reached"><option value="">No / not sure</option><option value="1">Yes</option></select></label>
-<label class="pa wide">Daily P&L since last payout (excluding today), comma separated<input id="days" value="800, 600, 300, 300"></label>
-</div></section>
-<section class="card plan" id="plan"></section>
-<section class="card"><h2>Get this card every morning — coming soon</h2>
-<form id="sub"><input type="email" id="email" placeholder="you@email.com" required><button>Notify me</button></form><p id="subMsg" class="muted"></p></section>
-<section class="card"><h2>Rule sources</h2><ul id="srcs" class="muted"></ul></section>
-</main><footer class="muted">PropPlan is an independent tool. Apex Trader Funding is a trademark of its owner. Calculations are estimates from published rules; your Apex dashboard is authoritative.</footer>
-<script src="/rules.js"></script><script src="/app.js"></script></body></html>
+<meta property="og:title" content="PropPlan — Apex consistency rule & trailing drawdown calculator"><meta property="og:description" content="Today's risk plan for your Apex eval or PA account."><meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/style.css"></head><body><div class="wrap">
+<header><span class="logo">Prop<span>Plan</span></span><h1>Apex daily risk calculator</h1></header>
+<section class="hero" id="hero" aria-live="polite"></section>
+<section class="sec" id="sec"></section>
+<form class="in" id="f" onsubmit="return false">
+<div class="seg" data-for="type"><button type="button" data-v="EOD">EOD</button><button type="button" data-v="INTRADAY">Intraday</button><button type="button" data-v="LEGACY">Legacy</button></div>
+<select id="type" hidden><option value="EOD">EOD</option><option value="INTRADAY">Intraday</option><option value="LEGACY">Legacy</option></select>
+<div class="row"><label>Size<select id="size"></select></label><label>Phase<select id="phase"><option value="EVAL">Evaluation</option><option value="PA" selected>Funded (PA)</option></select></label></div>
+<div class="row"><label>Balance now<input id="balance" type="number" inputmode="decimal" value="51800"></label><label><span id="peakLbl">Highest close</span><input id="peak" type="number" inputmode="decimal" value="52000"></label></div>
+<details id="more"><summary>More</summary>
+<label>Today's P&L so far<input id="today" type="number" inputmode="decimal" value="-200"></label>
+<label class="ev">Platform<select id="platform"><option value="TRADOVATE">Tradovate (trails indefinitely)</option><option value="RITHMIC">Rithmic (locks at target)</option><option value="WEALTHCHARTS">Wealthcharts (locks at target)</option></select></label>
+<label class="pa">Payouts taken<input id="payouts" type="number" inputmode="numeric" value="0" min="0"></label>
+<label class="pa">Daily P&L since last payout (comma separated)<input id="days" value="800, 600, 300, 300"></label>
+<label class="pa">Profit since last payout (optional)<input id="since" type="number" inputmode="decimal" placeholder="sum of days"></label>
+<label class="pa lg">Closed a day at/above safety net?<select id="reached"><option value="">No / not sure</option><option value="1">Yes</option></select></label>
+</details></form>
+<details class="sec2"><summary>Full breakdown</summary><div id="plan"></div></details>
+<section class="sub"><p>Get this plan every morning — coming soon.</p>
+<form id="sub"><input type="email" id="email" placeholder="you@email.com" required aria-label="Email"><button>Notify me</button></form><p id="subMsg" class="muted"></p></section>
+<p class="disc">Not financial advice. Not affiliated with Apex Trader Funding. Rules verified <span class="v"></span> — always confirm in your Apex dashboard.</p>
+<details class="srcd"><summary>Rule sources</summary><ul id="srcs" class="muted"></ul></details>
+</div><script src="/rules.js"></script><script src="/app.js"></script></body></html>

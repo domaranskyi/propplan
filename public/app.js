@@ -16,7 +16,8 @@ function render() {
   document.querySelectorAll('.pa').forEach((e) => e.style.display = phase === 'PA' ? '' : 'none');
   document.querySelectorAll('.lg').forEach((e) => e.style.display = phase === 'PA' && L ? '' : 'none');
   document.querySelectorAll('.ev').forEach((e) => e.style.display = phase === 'EVAL' ? '' : 'none');
-  $('peakLbl').textContent = type === 'EOD' ? 'Highest EOD (closing) balance ($)' : 'Highest peak balance incl. unrealized ($)';
+  $('peakLbl').textContent = type === 'EOD' ? 'Highest close' : 'Highest peak (incl. open P&L)';
+  document.querySelectorAll('.seg button').forEach((b) => b.classList.toggle('on', b.dataset.v === type));
   const p = R.plan({ size: $('size').value, type, phase, platform: $('platform').value, balance: $('balance').value, peak: $('peak').value,
     todayPnl: $('today').value, payoutsTaken: $('payouts').value, profitSinceLastPayout: $('since').value, reachedSafetyNet: !!$('reached').value,
     days: $('days').value.split(/[,\s]+/).filter(Boolean) });
@@ -26,7 +27,7 @@ function render() {
   const acct = L ? (phase === 'PA' ? S.legacyPA : S.legacyEval) : phase === 'EVAL' ? (type === 'EOD' ? S.evalEod : S.evalIntra) : (type === 'EOD' ? S.paEod : S.paIntra);
   const sz = L ? R.LEGACY[$('size').value] : null;
   const legSrc = L && $('size').value === '75000' ? S.legacy75kPlan : acct;
-  let h = `<h2>Today's Plan${L ? ` — Legacy ${sz.label}` : ''}</h2><div class="kpis">`;
+  let h = `<div class="kpis">`;
   h += kpi('Max you can lose today', f(p.maxLossToday), 'red', p.dll != null && p.dllRoom <= p.distanceToThreshold ? S.dll : ddSrc, `Binding: ${p.bindingLimit}`, 'maxLoss');
   const thNote = `${f(p.distanceToThreshold)} away` + (phase === 'EVAL' && !(L && p.static) ? (p.trailStopsAt ? ` · locks at ${f(p.trailStopsAt)}` : ' · trails indefinitely (Tradovate)') : '') + (L && p.static ? ' · static, never trails' : '');
   h += kpi('Drawdown threshold', f(p.threshold), '', phase === 'EVAL' && !L ? (type === 'EOD' ? S.eodDD : S.intraDD) : ddSrc, thNote, 'threshold');
@@ -65,11 +66,28 @@ function render() {
   }
   if (type !== 'EOD' && !(L && p.static)) h += `<li>Live trailing: every new peak (incl. unrealized) raises your threshold — update "peak" as you trade.</li>`;
   $('plan').innerHTML = h + '</ul>';
+  const stopDay = p.dll != null && p.dllRoom <= p.distanceToThreshold;
+  $('hero').innerHTML = `<small>Max loss today</small><div class="big">${f(p.maxLossToday)}</div><div class="stop">Stop at <b>${f(p.stopAtBalance)}</b></div><div class="why">${stopDay ? 'Daily loss limit — done for the day' : 'Drawdown — account closes here, stop before'}</div>`;
+  const c = p.consistency, py = p.payout, cell = (l, v, n) => `<div><small>${l}</small><b>${v}</b><i>${n}</i></div>`;
+  let s2 = cell('Contracts', p.contracts, `minis · ${p.contracts * 10} micros`);
+  if (phase === 'EVAL') s2 += cell('To target', f(p.toTarget), `at ${f(p.targetBalance)}`) + cell('Buffer', f(p.distanceToThreshold), 'to drawdown');
+  else {
+    const days = L ? `${py.tradingDays}/8` : `${py.qualifyingDays}/5`;
+    s2 += cell('Payout', py.daysLeft ? days + ' days' : f(py.amountLeft) === '$0' ? 'Ready' : f(py.amountLeft), py.daysLeft ? `${py.daysLeft} more needed` : py.amountLeft > 0 ? 'left to request' : 'eligible');
+    const cv = L && !c.applies ? 'n/a' : c.met ? '<span class="ok">Met</span>' : '<span class="no">Not met</span>';
+    s2 += cell('Consistency', cv, c.priorNet > 0 && (!L || c.applies) ? `keep today &lt; ${f(c.maxProfitTodayExclusive)}` : 'add days in More');
+  }
+  $('sec').innerHTML = s2;
+  const st = {}; KEYS.forEach((k) => st[k] = $(k).value); try { localStorage.pp = JSON.stringify(st); } catch (e) {}
 }
 // Prefill from URL, e.g. ?type=LEGACY&size=50000&phase=PA&balance=52300 (shareable plans).
-const Q = new URLSearchParams(location.search);
-if (Q.get('type')) { $('type').value = Q.get('type'); fillSizes($('type').value); lastType = $('type').value; }
-['size','phase','platform','balance','peak','today','payouts','since','reached','days'].forEach((k) => { if (Q.has(k)) $(k).value = Q.get(k); });
+// Precedence: URL > last inputs (localStorage) > defaults.
+const KEYS = ['type','size','phase','platform','balance','peak','today','payouts','since','reached','days'];
+let saved = {}; try { saved = JSON.parse(localStorage.pp || '{}'); } catch (e) {}
+const Q = new URLSearchParams(location.search), get = (k) => Q.has(k) ? Q.get(k) : saved[k];
+if (get('type')) { $('type').value = get('type'); fillSizes($('type').value); lastType = $('type').value; }
+KEYS.forEach((k) => { if (k !== 'type' && get(k) != null) $(k).value = get(k); });
+document.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => { $('type').value = b.dataset.v; render(); }));
 document.querySelectorAll('input,select').forEach((e) => e.addEventListener('input', render)); render();
 $('srcs').innerHTML = Object.entries(R.SRC).map(([k, u]) => `<li><a href="${u}" target="_blank" rel="noopener">${u.replace('https://apextraderfunding.com','')}</a> — verified ${R.VERIFIED}</li>`).join('');
 $('sub').addEventListener('submit', async (e) => { e.preventDefault();
